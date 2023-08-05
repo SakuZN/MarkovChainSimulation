@@ -3,11 +3,21 @@
     margin-top: 10px;
     border: 1px solid black;
 }
-#config-form {
+#config-form, .timeline {
     margin-top: 10px;
 }
 .scrollable-content {
     height: 600px; /* Adjust as needed */
     overflow-y: auto;
     overflow-x: auto;
+}
+#state-history {
+    height: 300px; /* Adjust as needed */
+    overflow-y: auto;
+    overflow-x: auto;
+}
+@media (max-width: 992px) {
+    #diagram-container {
+        flex-direction: column;
+    }
 }
