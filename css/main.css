@@ -6,3 +6,8 @@
 #config-form {
     margin-top: 10px;
 }
+.scrollable-content {
+    height: 600px; /* Adjust as needed */
+    overflow-y: auto;
+    overflow-x: auto;
+}
