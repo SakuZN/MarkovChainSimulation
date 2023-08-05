@@ -10,18 +10,25 @@
 </head>
 <body>
 
-<div class="container-fluid">
+<div class="container-fluid mb-5">
 	<div class="row">
 		<!-- Title -->
 		<h3 class="mb-3">Markov Chain Diagram</h3>
 		<div class="col-lg-8 col-md-12">
-			<div id="canvas" class="border" style="height: 600px;"></div>
+			<div id="canvas" class="border" style="height: 600px;">
+			</div>
+			<div class="text-center timeline border" style="height:45%">
+				<h3 class="mb-3 mt-3">Event Sequence | Timeline:</h3>
+				<div id="state-history" class="mx-3 scrollable-content">
+					<!-- State history goes here -->
+				</div>
+			</div>
 			<script src="https://unpkg.com/vis-network@7.6.2/standalone/umd/vis-network.min.js"></script>
 			<script src="scripts/markov_diagram.js"></script>
 		</div>
-		<div class="col-lg-4 col-md-12 mt-3 mt-lg-0">
-			<div class="card">
-				<div class="card-body scrollable-content">
+		<div class="col mt-2">
+			<div class="card" style="height:100%">
+				<div class="card-body">
 					<h5 class="card-title">Markov Chain Configuration</h5>
 					<button id="weather-data" class="btn btn-info" type="button">Example: Weather</button>
 					<form id="config-form">
@@ -61,9 +68,6 @@
 						</div>
 					</form>
 				</div>
-			</div>
-			<div id="state-history" class="mt-3">
-				<!-- State history goes here -->
 			</div>
 		</div>
 	</div>
