@@ -19,12 +19,13 @@ function showPopup(message) {
 	});
 }
 function sampleWeather(){
-	let states = ["Sunny", "Rainy"];
+	let states = ["Sunny", "Rainy", "Cloudy"];
 	let probabilities = [
-		[0.5, 0.5],
-		[0.5, 0.5]
+		[0.7, 0.2, 0.1],
+		[0.1, 0.6, 0.3],
+		[0.2, 0.5, 0.3],
 	];
-	let initProbs = [0.5, 0.5];
+	let initProbs = [0.5, 0.3, 0.2];
 	let n_steps = 10;
 	let interval = 500;
 	return {
@@ -240,9 +241,15 @@ $(document).ready(function() {
 		matrixInputs.empty();
 		n_matrixInputs.empty();
 		$("#state-history").empty();
-		if (visNetwork !== null) {
-			visNetwork.destroy();
+		try {
+			if (visNetwork.body !== null) {
+				visNetwork.destroy();
+				clearData();
+			}
+		} catch (error) {
+			//Do nothing
 		}
+		
 	}
 	function initForm(){
 		while(stateInputs.find("input").length < 2){
@@ -351,14 +358,20 @@ $(document).ready(function() {
 			return;
 		}
 
-		if (visNetwork !== null) {
-			visNetwork.destroy();
+		try {
+			if (visNetwork.body !== null) {
+				visNetwork.destroy();
+				clearData();
+			}
+		} catch (error) {
+			//Do nothing
 		}
 		visNetwork = createNetwork(getStateNames(), getMatrix(), getInitProbs());
-
+		
 		visNetwork.on('stabilizationIterationsDone', function () {
 			// Disable physics once the network has stabilized
 			visNetwork.setOptions({ physics: false });
+			visNetwork.fit();
 		});
 	}
 
@@ -367,10 +380,13 @@ $(document).ready(function() {
 			event.preventDefault();
 		}
 		//Check if the diagram is initialized
-		if (visNetwork === null) {
-			showPopup("Please initialize Markov Chain first.");
+		try {
+			let check = visNetwork.body !== null;
+		} catch (error) {
+			showPopup("Please initialize the diagram first.");
 			return;
 		}
+		
 		resetSimulation(visNetwork);
 		//Check if the simulation is running if yes, call stopSimulation and revert the button text
 		if (isRunning()) {
@@ -481,7 +497,7 @@ $(document).ready(function() {
 	$("#health-data").on("click", preFillForm);
 	$("#manufacture-data").on("click", preFillForm);
 	$("#sports-data").on("click", preFillForm);
-	n_value.on("change", n_stepCalculation);
+	n_value.on("input blur", n_stepCalculation);
 
 	initForm();
 });

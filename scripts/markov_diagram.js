@@ -7,10 +7,19 @@ let stateData = {
 let intervalID = null;
 
 function getRandomColor() {
-	let r = Math.floor(Math.random() * 256);
-	let g = Math.floor(Math.random() * 256);
-	let b = Math.floor(Math.random() * 256);
-	return 'rgb(' + r + ',' + g + ',' + b + ')';
+	let colors = [
+		'#4285F4',  // Google Blue
+		'#34A853',  // Google Green
+		'#F4B400',  // Google Yellow
+		'#FFFF00',  // Pure Yellow
+		'#0000FF',  // Pure Blue
+		'#008080',  // Teal
+		'#000080',  // Navy
+		'#0096b1',  // Purple
+		'#A52A2A',  // Brown
+		'#808080'   // Gray
+	];
+	return colors[Math.floor(Math.random() * colors.length)];
 }
 
 function weightedRandomChoice(probabilities) {
@@ -31,25 +40,28 @@ function createNetwork(states, probabilities, initProbs) {
 	// 'probabilities' is a 2D array representing the transition matrix
 
 	// create nodes array
-	let nodes = new vis.DataSet(states.map((state, index) => ({
-		id: index,
-		label: state,
-		color: "#00b4d8",
-	})));
-	//Store in stateData
-	states.map((state, index) => {
-		stateData.states[index] = {
-			id: index,
-			name: state,
-			color: "#00b4d8"
+	let nodes = new vis.DataSet();
+	for (let i = 0; i < states.length; i++) {
+		let randomColor = getRandomColor();
+		nodes.add({
+			id: i,
+			label: states[i],
+			color: randomColor,
+		});
+		//Store in stateData
+		stateData.states[i] = {
+			id: i,
+			name: states[i],
+			color: randomColor
 		}
-	});
+	}
 	// Create edges array
 	let edges = new vis.DataSet();
 	let seperation = 0;
 	for (let i = 0; i < states.length; i++) {
 		for (let j = 0; j < states.length; j++) {
 			let prob = probabilities[i][j];
+			let color = stateData.states[i].color;
 			if (prob > 0) { // If probability is greater than 0, add an edge
 				edges.add({
 					id: i + j + seperation,
@@ -58,7 +70,7 @@ function createNetwork(states, probabilities, initProbs) {
 					arrows: 'to',
 					arrowStrikethrough: false,
 					label: String(prob),
-					color: "#00b4d8",
+					color: color
 				});
 			}
 			//Store in stateData
@@ -69,7 +81,7 @@ function createNetwork(states, probabilities, initProbs) {
 
 			// Now assign the probability
 			stateData.probabilities[i][j] = prob;
-			stateData.edgeColors[i][j] = "#00b4d8";
+			stateData.edgeColors[i][j] = color;
 		}
 		seperation += states.length;
 	}
@@ -87,32 +99,44 @@ function createNetwork(states, probabilities, initProbs) {
 		nodes: {
 			shape: 'circle',
 			physics: true,
-			size: 500,
 			font: {
 				size: 30,
 				face: 'Poppins'
-			}
+			},
+			scaling: {
+				min: 10,
+				max: 30,
+				label: {
+					enabled: true,
+					min: 14,
+					max: 30,
+					maxVisible: 30,
+					drawThreshold: 5
+				},
+				customScalingFunction: function (min,max,total,value) {
+					if (max === min) {
+						return 0.5;
+					}
+					else {
+						let scale = 1 / (max - min);
+						return Math.max(0,(value - min)*scale);
+					}
+				}
+			},
 		},
 		interaction: {
 			dragNodes: true,  // Allow dragging nodes
 			selectable: false,
-			zoomView: false,
-			dragView: false
+			zoomView: true,
+			dragView: true,
+			hover: true
 		},
 		physics: {
-			solver: 'forceAtlas2Based',
-			timestep: 0.5,
-			stabilization: {
-				enabled: true,
-				iterations: 1000,
-				updateInterval: 50
-			},
-			forceAtlas2Based: {
-				gravitationalConstant: -150,
-				springConstant: 0,
-				springLength: 0,
-				damping: 0.4,
-				avoidOverlap: 0.1,
+			stabilization: false,
+			barnesHut: {
+				gravitationalConstant: -2000,
+				springConstant: 0.04,
+				springLength: 250
 			}
 		},
 		edges: {
@@ -137,9 +161,10 @@ function createNetwork(states, probabilities, initProbs) {
 		/*
 		configure: {
 			enabled: true,
-			filter: 'nodes,edges',
+			filter: 'physics',
 		}
 		 */
+		
 	};
 	
 	return new vis.Network(container, data, options);
@@ -225,6 +250,14 @@ function isRunning() {
 function stopSimulation() {
 	clearInterval(intervalID);
 	intervalID = null;
+}
+function clearData() {
+	stateData = {
+		states: [{}],
+		probabilities: [[]],
+		edgeColors: [[]],
+		initProbs: [],
+	};
 }
 function resetSimulation(vis_network) {
 	// Get the edges and nodes
