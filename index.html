@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Markov Chain Visualization</title>
+    <title>Markov Chain Visualization and Visualization</title>
     <meta name="description" content="A markov chain visualization and simulation" />
     <meta name="robots" content="noindex, nofollow" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css" />
@@ -21,10 +21,17 @@
     <div class="container-fluid mb-5">
       <div class="row">
         <h1 class="mb-2 mt-3">Markov Chains Visualization</h1>
-        <p class="fs-6">This website is created for the purpose of visualizing Markov Chain.</p>
+        <p class="fs-6">This website is created for the purpose of visualizing Markov Chains.</p>
         <p class="description">
           <span class="fw-medium">Before we get started,</span> look into how Markov Chain works. If you wish to skip,
           you may collapse the division by clicking the title below.
+        </p>
+        <p class="description">
+          <span class="fw-medium">Want a more detailed explanation?</span> You may find a more detailed explanation of
+          Markov Chains, complete with the Python code used to derive the simulation results shown below, by clicking
+          <a href="https://datalore.jetbrains.com/notebook/BHICuHTWkj8Anq9egAu6Pv/NWwROZYFAb4wT3uGpoB4w9">here.</a>
+          <br />
+          <strong>(Note that you need a Jetbrains account to access the link)</strong>
         </p>
         <div class="accordion">
           <div class="accordion-item">
@@ -173,6 +180,18 @@
                     Selecting a sure initial state is simply setting the vector to [1.0, 0.0, 0.0]. In this example this
                     is exactly what we do, making the start state always sunny.
                   </p>
+
+                  <p>
+                    <strong> Example Runs from the current set rules: <br /> </strong>
+                    [Initial: Sunny → Sunny → Cloudy → Rainy → Cloudy → Rainy → Rainy → Rainy → Cloudy → Cloudy → Sunny
+                    → End]
+                    <br />
+                    [Initial: Sunny → Sunny → Cloudy → Cloudy → Cloudy → Sunny → Sunny → Rainy → Rainy → Rainy → Rainy →
+                    End]
+                    <br />
+                    [Initial: Sunny → Sunny → Sunny → Sunny → Sunny → Sunny → Sunny → Sunny → Sunny → Sunny → Sunny →
+                    End]
+                  </p>
                 </section>
                 <section class="n-step-transition-matrix mt-4">
                   <h5>N-Step Transition Matrix</h5>
@@ -238,8 +257,38 @@
                       <p>
                         After the two step matrix it gets a little tricky as we need to get three and beyond we need to
                         get dot product of the previous step and the current transition which can get tedious as more
-                        steps are added.
+                        steps are added. (P^3 = P^2 * P)
                       </p>
+                      <table class="dot-product table">
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th scope="col">0</th>
+                            <th scope="col">1</th>
+                            <th scope="col">2</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">0</th>
+                            <td>0.434</td>
+                            <td>0.372</td>
+                            <td>0.1939</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>0.242</td>
+                            <td>0.496</td>
+                            <td>0.2619</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>0.2759</td>
+                            <td>0.474</td>
+                            <td>0.2499</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </section>
                     <section class="steady-state">
                       <h5>Steady State</h5>
@@ -252,7 +301,20 @@
                         The concept of steady state is central to stationary or time-homogeneous Markov chains, where
                         the transition probabilities don't change over time.
                       </p>
-                      <p class="fw-bold">>> CODE SNIPPET AND RESULTS HERE <<</p>
+                      <p>
+                        <strong> n(1) Step Matrix at the nth power </strong> <br />
+                        [[0.7 0.2 0.1] <br />
+                        [0.1 0.6 0.3] <br />
+                        [0.2 0.5 0.3]]
+
+                        <br />
+                        <br />
+
+                        <strong> n(19) Step Matrix </strong> <br />
+                        [[0.30953707 0.45237239 0.23809054] <br />
+                        [0.30951661 0.4523856 0.23809779] <br />
+                        [0.30952024 0.45238326 0.2380965 ]]
+                      </p>
                       <div class="ending">
                         <h6>What is this all for?</h6>
                         <p>
@@ -264,7 +326,7 @@
                         </p>
                         <p>
                           From the results of the weather chain, we can say that the probability of it being sunny is
-                          31%, rainy 45%, and cloudy 24%.
+                          around 31%, rainy 45%, and cloudy 24%.
                         </p>
                         <p>
                           In a perfect world, where there are no changes due to factors like global warming, and
