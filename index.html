@@ -3,17 +3,225 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Markov Chain Visualization</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/modal-animation.css">
 	<link href="https://unpkg.com/vis-network@7.6.2/styles/vis-network.min.css" rel="stylesheet">
 </head>
-<body>
-
+<body>	
 <div class="container-fluid">
 	<div class="row">
+		<h1 class="mb-2 mt-3">Markov Chains Visualization</h1>
+		<p class="fs-6">This website is created for the purpose of visualizing Markov Chain.</p>
+		<p class="description">
+			<span class="fw-medium">Before we get started,</span> look into how Markov Chain works. If you wish to skip, you may collapse the division by clicking the title below.
+		</p>
+		<div class="accordion">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						Introducing Markov Chains
+					</button>
+				</h2>
+				<div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+					<div class="accordion-body">
+					  <section class="introduction">
+						A <strong>Markov Chain</strong> is a random process that undergoes transitions from one state to another on a state space. The defining characteristic is that the probability of transitioning to any particular state depends solely on the current state and time elapsed, and not on the sequence of states that preceded it.
+					  </section>
+					  <section class="memorylessness mt-4">
+						<h5>Memorylessness</h5>
+						<p>
+							Memorylessness is a key feature of Markov Chains. If we look at the example, previous states do not matter as the next state solely relies on the probabilities from the current state.
+						</p>
+					  </section>
+					  <section class="stochastic-process mt-4">
+						<h5>Stochastic Process</h5>
+						<p>A stochastic process is a collection of random variables: <span class="math">\{X_t,t \in I \},</span> Where <span class="math">X_t</span> is the set of random variables at time <span class="math">t</span>, and <span class="math">I</span> is the index set of the process.</p>
+						<p>Markov Chain is a type of Stochastic Process</p>
+					  </section>
+					  <section class="markov-process mt-4">
+						<h5>Markov Process</h5>
+						<p>A sequence of random states S1, S2, ..., with the Markov property, is called a Markov chain. This process can be entirely defined by the state space and transition matrix.</p>
+						<ul>
+							<li><strong>State Space:</strong> A set of all possible states</li>
+							<li><strong>Transition Matrix:</strong> A matrix wherein each entry on the i-th row and j-th column (<span class="math">aij</span>) represents the probability of moving from state i to state j.</li>
+						</ul>
+						<strong>Let's create a simple markov chain.</strong>
+						<center>
+							<img class="img-fluid" src="https://deparkes.co.uk/wp-content/uploads/2020/08/GraphView.png"/>
+							<div><small class="text-center text-muted">Markov Transition Graph from Deparkes</small></div>
+						</center>
+						<table class="weather-table table mt-4">
+							<thead>
+								<tr>
+									<th scope="col"></th>
+									<th scope="col">Sunny</th>
+									<th scope="col">Rainy</th>
+									<th scope="col">Cloudy</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">Sunny</th>
+									<td>0.7</td>
+									<td>0.2</td>
+									<td>0.1</td>
+								</tr>
+								<tr>
+									<th scope="row">Rainy</th>
+									<td>0.1</td>
+									<td>0.6</td>
+									<td>0.3</td>
+								</tr>
+								<tr>
+									<th scope="row">Cloudy</th>
+									<td>0.2</td>
+									<td>0.5</td>
+									<td>0.3</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>
+							The state space represents the weather conditions. The transition matrix weather chain represents the probabilities of moving from one weather condition to the other. This matrix is in column form and each column represents the probabilities of going from one state to another.
+						</p>
+						<p>Example:</p>
+						<div class="sunny-desc">
+							The 'Sunny' list <strong>[0.7, 0.1, 0.2]</strong> indicates the probabilities of the following transitions:
+							<ul>
+								<li>Transitioning from 'Sunny' to 'Sunny': 0.7</li>
+								<li>Transitioning from 'Rainy' to 'Sunny': 0.1</li>
+								<li>Transitioning from 'Cloudy' to 'Sunny': 0.2</li>
+							</ul>
+						</div>
+						<div class="rainy-desc">
+							The 'Rainy' list <strong>[0.2, 0.6, 0.5]</strong> indicates the probabilities of the following transitions:
+							<ul>
+								<li>Transitioning from 'Sunny' to 'Rainy': 0.2</li>
+								<li>Transitioning from 'Rainy' to 'Rainy': 0.6</li>
+								<li>Transitioning from 'Cloudy' to 'Rainy': 0.5</li>
+							</ul>
+						</div>
+						<div class="cloudy-desc">
+							The 'Cloudy' list <strong>[0.1, 0.3, 0.3]</strong> indicates the probabilities of the following transitions:
+							<ul>
+								<li>Transitioning from 'Sunny' to 'Cloudy': 0.1</li>
+								<li>Transitioning from 'Rainy' to 'Cloudy': 0.3</li>
+								<li>Transitioning from 'Cloudy' to 'Cloudy': 0.3</li>
+							</ul>
+						</div>
+					  </section>
+					  <section class="initial-state-probability mt-4">
+						<h5>Initial State Probability</h5>
+						<p>
+							The initial state probability is typically denoted as a vector, where each entry corresponds to the probability of the system being in a particular state at the start. The sum of all probabilities in this vector must equal 1, reflecting the certainty that the system must be in one of the possible states at the beginning.
+						</p>
+						<p>
+							For example, if we have a Markov chain with states 'Sunny', 'Rainy', and 'Cloudy', we might have an initial state probability vector like <strong>[0.5, 0.3, 0.2]</strong>. This would mean that at the start, the system has a 50% chance of being in the 'Sunny' state, a 30% chance of being in the 'Rainy' state, and a 20% chance of being in the 'Cloudy' state.
+						</p>
+						<p>
+							When defining Markov Chains, one can either set an initial state or initial state probabilities. Selecting a sure initial state is simply setting the vector to [1.0, 0.0, 0.0]. In this example this is exactly what we do, making the start state always sunny.
+						</p>
+					  </section>
+					  <section class="n-step-transition-matrix mt-4">
+						<h5>N-Step Transition Matrix</h5>
+						<p>
+							What n Step Transition Matrix gives us is the probability of reaching a certain future state given the current state at n steps.
+						</p>
+						<p>
+							An n-step transition matrix is found by taking the nth power of the original transition matrix. This is based on the principle that the probability of transitioning from one state to another in n steps is the sum of the probabilities of all paths from the initial state to the final state that consist of exactly n steps.
+						</p>
+						<p>
+							If we want to find the 2-step transition matrix, we compute <span class="math">P^2</span> (i.e., the matrix product of <span class="math">P</span> with itself). This gives us the probabilities of transitioning from each state to each other state in 2 steps.
+						</p>
+						<p>
+							One important point to remember is that the process of taking powers of the transition matrix assumes that the Markov chain is time-homogeneous, meaning that the transition probabilities do not change over time.
+						</p>
+						<div class="steps ml-4">
+							<section class="step-1">
+								<h6>Get the 2-step transition matrix</h6>
+								<table class="dot-product table">
+									<thead>
+										<tr>
+											<th scope="col"></th>
+											<th scope="col">0</th>
+											<th scope="col">1</th>
+											<th scope="col">2</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th scope="row">0</th>
+											<td>0.53</td>
+											<td>0.31</td>
+											<td>0.16</td>
+										</tr>
+										<tr>
+											<th scope="row">1</th>
+											<td>0.19</td>
+											<td>0.35</td>
+											<td>0.28</td>
+										</tr>
+										<tr>
+											<th scope="row">2</th>
+											<td>0.25</td>
+											<td>0.49</td>
+											<td>0.26</td>
+										</tr>
+									</tbody>
+								</table>
+								<p>
+									It is telling us here that after 2 steps these are the chances to end up in a certain weather
+								</p>
+							</section>
+							<section class="3-step-and-beyond">
+								<h6>3 step and beyond</h6>
+								<p>
+									After the two step matrix it gets a little tricky as we need to get three and beyond we need to get dot product of the previous step and the current transition which can get tedious as more steps are added.
+								</p>
+							</section>
+							<section class="steady-state">
+								<h5>Steady State</h5>
+								<p>
+									The steady state in a Markov chain is a state where the system's probabilities remain unchanged even after transitions. That is, the system has reached an equilibrium where the distribution of states in the future does not depend on the current state.
+								</p>
+								<p>
+									The concept of steady state is central to stationary or time-homogeneous Markov chains, where the transition probabilities don't change over time.
+								</p>
+								<p class="fw-bold">
+									>> CODE SNIPPET AND RESULTS HERE <<
+								</p>
+								<div class="ending">
+									<h6>What is this all for?</h6>
+									<p>
+										From the result of the steady state we can say the long term probability of the day being a certain weather is dependent on our achieved steady state.
+									</p>
+									<p>
+										<strong>Example</strong>
+									</p>
+									<p>
+										From the results of the weather chain, we can say that the probability of it being sunny is 31%, rainy 45%, and cloudy 24%.
+									</p>
+									<p>
+										In a perfect world, where there are no changes due to factors like global warming, and assuming our matrix is correct, if one gathers enough weather data, then we'd expect these rough proportions.
+									</p>
+								</div>
+							</section>
+							<section class="outro">
+								<h5>Let's try the diagram below!</h5>
+								<p>
+									You can try to create your own Markov Chain and see how it works.
+								</p>
+							</section>
+						</div>
+					  </section>
+					</div>
+				  </div>
+			</div>
+		</div>
 		<!-- Title -->
-		<h3 class="mb-3 text-center">Markov Chain Diagram</h3>
+		<h3 class="mb-3 mt-5 text-center">Markov Chain Diagram</h3>
 		<div class="col-lg-8 col-md-12">
 			<div id="canvas" class="border" style="height: 600px;"></div>
 			<script src="https://unpkg.com/vis-network@7.6.2/standalone/umd/vis-network.min.js"></script>
@@ -109,6 +317,15 @@
 	</div>
 </div>
 <!-- Scripts -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var mathElements = document.getElementsByClassName('math');
+        for (var i = 0; i < mathElements.length; i++) {
+            var mathElement = mathElements[i];
+            katex.render(mathElement.innerText, mathElement);
+        }
+    });
+</script>
 <script crossorigin="anonymous"
         integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
         referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
