@@ -215,6 +215,9 @@ function appendStateHistory(fromStateName, toStateName, timeLineCount) {
 
 	// Append the transitionDiv to the state-history container
 	$('#state-history').append(transitionDiv);
+
+	// scroll to bottom
+	$('#state-history').scrollTop($('#state-history')[0].scrollHeight);
 }
 function isRunning() {
 	return intervalID !== null;

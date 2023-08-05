@@ -10,8 +10,9 @@
 	<link rel="stylesheet" href="css/modal-animation.css">
 	<link href="https://unpkg.com/vis-network@7.6.2/styles/vis-network.min.css" rel="stylesheet">
 </head>
-<body>	
-<div class="container-fluid">
+<body>
+
+<div class="container-fluid mb-5">
 	<div class="row">
 		<h1 class="mb-2 mt-3">Markov Chains Visualization</h1>
 		<p class="fs-6">This website is created for the purpose of visualizing Markov Chain.</p>
@@ -223,13 +224,20 @@
 		<!-- Title -->
 		<h3 class="mb-3 mt-5 text-center">Markov Chain Diagram</h3>
 		<div class="col-lg-8 col-md-12">
-			<div id="canvas" class="border" style="height: 600px;"></div>
+			<div id="canvas" class="border" style="height: 600px;">
+			</div>
+			<div class="text-center timeline border" style="height:45%">
+				<h3 class="mb-3 mt-3">Event Sequence | Timeline:</h3>
+				<div id="state-history" class="mx-3 scrollable-content">
+					<!-- State history goes here -->
+				</div>
+			</div>
 			<script src="https://unpkg.com/vis-network@7.6.2/standalone/umd/vis-network.min.js"></script>
 			<script src="scripts/markov_diagram.js"></script>
 		</div>
-		<div class="col-lg-4 col-md-12 mt-3 mt-lg-0">
-			<div class="card">
-				<div class="card-body scrollable-content">
+		<div class="col mt-2">
+			<div class="card" style="height:100%">
+				<div class="card-body">
 					<h5 class="card-title">Markov Chain Configuration</h5>
 					<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 						<button id="weather-data" class="btn btn-info" type="button">Example: Weather</button>
@@ -289,14 +297,7 @@
 					</form>
 				</div>
 			</div>
-			<div  class="scrollable-content text-center timeline">
-				<h3 class="mb-3">Event Sequence | Timeline:</h3>
-				<div id="state-history">
-					<!-- State history goes here -->
-				</div>
-			</div>
 		</div>
-		
 	</div>
 </div>
 <!-- Popup Modal -->
