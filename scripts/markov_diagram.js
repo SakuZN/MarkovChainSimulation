@@ -12,6 +12,7 @@ function getRandomColor() {
 	let b = Math.floor(Math.random() * 256);
 	return 'rgb(' + r + ',' + g + ',' + b + ')';
 }
+
 function weightedRandomChoice(probabilities) {
 	const randomValue = Math.random();
 	let sum = 0;
@@ -94,7 +95,7 @@ function createNetwork(states, probabilities, initProbs) {
 		},
 		interaction: {
 			dragNodes: true,  // Allow dragging nodes
-			selectable: true,
+			selectable: false,
 			zoomView: false,
 			dragView: false
 		},
@@ -124,7 +125,7 @@ function createNetwork(states, probabilities, initProbs) {
 				}
 			},
 			font: {
-				size: 20,
+				size: 16,
 				face: 'Poppins',
 				align: 'top'
 			},
@@ -133,6 +134,12 @@ function createNetwork(states, probabilities, initProbs) {
 		layout: {
 			improvedLayout: true,
 		},
+		/*
+		configure: {
+			enabled: true,
+			filter: 'nodes,edges',
+		}
+		 */
 	};
 	
 	return new vis.Network(container, data, options);
@@ -146,8 +153,8 @@ function runSimulation (vis_network, speed, n_steps) {
 
 	// Get the initial state
 	let currentState = weightedRandomChoice(stateData.initProbs);
-
-	function showTransition(fromState, toState) {
+	let timelineCounter = 0;
+	function showTransition(fromState, toState, timeLineCount) {
 		// Keep the original colors
 		const originalNodeColor = stateData.states[fromState].color;
 		const originalEdgeColor = stateData.edgeColors[fromState][toState];
@@ -161,6 +168,7 @@ function runSimulation (vis_network, speed, n_steps) {
 
 		// Highlight the next state
 		nodes.update({ id: toState, borderWidth: 7 });
+		appendStateHistory(stateData.states[fromState].name, stateData.states[toState].name, timeLineCount);
 
 		// After the speed interval, revert the colors and move to the next state
 		setTimeout(() => {
@@ -176,32 +184,25 @@ function runSimulation (vis_network, speed, n_steps) {
 
 	// Initial transition
 	const nextState = weightedRandomChoice(stateData.probabilities[currentState]);
-	showTransition(currentState, nextState);
+	showTransition(currentState, nextState, timelineCounter++);
 
 	// Simulate transitions with a speed*2 interval
 	let numRuns = 0;
 	intervalID = setInterval(() => {
 		const prevState = currentState;
 		currentState = weightedRandomChoice(stateData.probabilities[currentState]);
-		showTransition(prevState, currentState);
+		showTransition(prevState, currentState, timelineCounter++);
 		//Create another timeout to wait for the transition to finish
-		if (numRuns++ >= n_steps) {
+		if (++numRuns >= n_steps) {
 			clearInterval(intervalID);
 			intervalID = null;
 			setTimeout(() => { // Wrap the color reset code in a setTimeout
-				$("#simulate-btn").text("Simulate").removeClass("btn-danger").addClass("btn-primary");
-				//Reset the colors
-				for (let i = 0; i < stateData.states.length; i++) {
-					nodes.update({ id: i, color: stateData.states[i].color, borderWidth: 2 });
-					for (let j = 0; j < stateData.states.length; j++) {
-						edges.update({ id: i + j + (i * stateData.states.length), color: stateData.edgeColors[i][j] });
-					}
-				}
-			}, speed * 2); // This should be equal or more than the last setTimeout delay in the setInterval
+				resetSimulation(vis_network);
+			}, speed * 2);
 		}
 	}, speed * 2);
 }
-function appendStateHistory(fromStateName, toStateName) {
+function appendStateHistory(fromStateName, toStateName, timeLineCount) {
 	// Create a new div to hold the transition
 	let transitionDiv = $('<div>').addClass('transition-item bg-light p-2 mb-2 border rounded');
 
@@ -210,7 +211,7 @@ function appendStateHistory(fromStateName, toStateName) {
 	let toSpan = $('<span>').addClass('text-success').text(toStateName);
 
 	// Combine them with an arrow and append to the transitionDiv
-	transitionDiv.append(fromSpan, ' → ', toSpan);
+	transitionDiv.append(`[${timeLineCount}] `,fromSpan, ' → ', toSpan);
 
 	// Append the transitionDiv to the state-history container
 	$('#state-history').append(transitionDiv);
@@ -224,5 +225,20 @@ function isRunning() {
 function stopSimulation() {
 	clearInterval(intervalID);
 	intervalID = null;
+}
+function resetSimulation(vis_network) {
+	// Get the edges and nodes
+	let nodes = vis_network.body.data.nodes;
+	let edges = vis_network.body.data.edges;
+	
+	// Reset the button
+	$("#simulate-btn").text("Simulate").removeClass("btn-danger").addClass("btn-primary");
+	// Reset the colors
+	for (let i = 0; i < stateData.states.length; i++) {
+		nodes.update({ id: i, color: stateData.states[i].color, borderWidth: 2 });
+		for (let j = 0; j < stateData.states.length; j++) {
+			edges.update({ id: i + j + (i * stateData.states.length), color: stateData.edgeColors[i][j] });
+		}
+	}
 }
 

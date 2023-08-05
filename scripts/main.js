@@ -26,7 +26,63 @@ function sampleWeather(){
 	];
 	let initProbs = [0.5, 0.5];
 	let n_steps = 10;
-	let interval = 1000;
+	let interval = 500;
+	return {
+		states: states,
+		probabilities: probabilities,
+		initProbs: initProbs,
+		n_steps: n_steps,
+		interval: interval
+	}
+}
+
+function sampleHealth(){
+	let states = ["Healthy", "Sick", "Recovering"];
+	let probabilities = [
+		[0.6, 0.4, 0],
+		[0,0.5,0.5],
+		[0.5,0.25,0.25]
+	];
+	let initProbs = [0.6, 0.2, 0.2];
+	let n_steps = 10;
+	let interval = 500;
+	return {
+		states: states,
+		probabilities: probabilities,
+		initProbs: initProbs,
+		n_steps: n_steps,
+		interval: interval
+	}
+}
+
+function sampleManufacturing(){
+	let states = ["Defective", "Working", "Repaired"];
+	let probabilities = [
+		[0.4, 0.2, 0.4],
+		[0.4, 0.6, 0],
+		[0.2, 0.6, 0.2]
+	];
+	let initProbs = [0.3, 0.4, 0.3];
+	let n_steps = 10;
+	let interval = 500;
+	return {
+		states: states,
+		probabilities: probabilities,
+		initProbs: initProbs,
+		n_steps: n_steps,
+		interval: interval
+	}
+}
+function sampleSports(){
+	let states = ["Play Well", "Play Poor", "Injured"];
+	let probabilities = [
+		[0.5,0.2,0.3],
+		[0.2,0.2,0.6],
+		[0,1,0]
+	];
+	let initProbs = [0.33, 0.33, 0.34];
+	let n_steps = 10;
+	let interval = 500;
 	return {
 		states: states,
 		probabilities: probabilities,
@@ -40,8 +96,10 @@ $(document).ready(function() {
 	const stateInputs = $("#state-inputs");
 	const initProbInputs = $("#init-prob-inputs");
 	const matrixInputs = $("#matrix-inputs");
+	const n_matrixInputs = $("#nmatrix-inputs");
 	const n_steps = $("#n-steps-input");
 	const interval = $("#interval-input");
+	const n_value = $("#n-value-input");
 
 	function getStateNames() {
 		return stateInputs.find("input").map(function() {
@@ -70,6 +128,9 @@ $(document).ready(function() {
 	function getInterval() {
 		return parseInt(interval.val());
 	}
+	function getNValue() {
+		return parseInt(n_value.val());
+	}
 
 	function updateProbInputs() {
 		let stateNames = getStateNames();
@@ -86,6 +147,7 @@ $(document).ready(function() {
 
 		initProbInputs.empty();
 		matrixInputs.empty();
+		n_matrixInputs.empty();
 
 		// Create matrix header
 		let header = $("<div>").addClass("row mb-2");
@@ -94,6 +156,7 @@ $(document).ready(function() {
 			header.append($("<div>").addClass("col").text(stateNames[i]));
 		}
 		matrixInputs.append(header);
+		n_matrixInputs.append(header.clone());
 
 		for (let i = 0; i < stateNames.length; i++) {
 			// Create initial state probability inputs
@@ -122,6 +185,9 @@ $(document).ready(function() {
 				row.append(column);
 			}
 			matrixInputs.append(row);
+			n_matrixInputs.append(row.clone());
+			//Disable the inputs for n matrix
+			n_matrixInputs.find("input").prop("disabled", true);
 		}
 	}
 
@@ -135,7 +201,7 @@ $(document).ready(function() {
 			.addClass("form-control mb-2")
 			.attr("placeholder", "Enter state")
 			//add character limit
-			.attr("maxlength", "8")
+			.attr("maxlength", "10")
 			.keyup(updateProbInputs);  // Add keyup event listener
 		stateInputs.append(newStateInput);
 
@@ -149,6 +215,15 @@ $(document).ready(function() {
 		// Remove the state input
 		//Remove the last or latest state input
 		stateInputs.find("input").last().remove();
+		initProbInputs.find("input").last().remove();
+		matrixInputs.find(".row").each(function() {
+			$(this).find(".col").last().remove();
+		})
+		matrixInputs.find(".row").last().remove();
+		n_matrixInputs.find(".row").each(function() {
+			$(this).find(".col").last().remove();
+		})
+		n_matrixInputs.find(".row").last().remove();
 		updateProbInputs();
 	}
 	function resetForm(){
@@ -163,6 +238,8 @@ $(document).ready(function() {
 		initProbInputs.empty();
 		//Remove all the transition matrix inputs
 		matrixInputs.empty();
+		n_matrixInputs.empty();
+		$("#state-history").empty();
 		if (visNetwork !== null) {
 			visNetwork.destroy();
 		}
@@ -171,6 +248,46 @@ $(document).ready(function() {
 		while(stateInputs.find("input").length < 2){
 			addNewState();
 		}
+	}
+	
+	//Helper function for matrix exponentiation
+	function multiplyMatrix(A, B) {
+		let rowsA = A.length, colsA = A[0].length,
+			rowsB = B.length, colsB = B[0].length,
+			C = [];
+
+		if (colsA != rowsB) return false;
+
+		for (let i = 0; i < rowsA; i++) C[i] = [];
+
+		for (let k = 0; k < colsA; k++) {
+			for (let i = 0; i < rowsA; i++) {
+				if (!C[i][k]) C[i][k] = 0;
+				for (let j = 0; j < colsB; j++) {
+					if (!B[k][j]) B[k][j] = 0;
+					if (!C[i][j]) C[i][j] = 0;
+					C[i][j] += A[i][k] * B[k][j];
+				}
+			}
+		}
+
+		return C;
+	}
+
+	function matrixExponentiation(matrix, power) {
+		let identityMatrix = matrix.map((row, rowIndex) =>
+			row.map((val, colIndex) => +(rowIndex === colIndex))
+		);
+
+		while (power > 0) {
+			if (power & 1) {
+				identityMatrix = multiplyMatrix(identityMatrix, matrix);
+			}
+			matrix = multiplyMatrix(matrix, matrix);
+			power >>= 1;
+		}
+
+		return identityMatrix;
 	}
 
 	//Helper function for input validation
@@ -200,8 +317,6 @@ $(document).ready(function() {
 		// Verify that probabilities are between 0 and 1, and sum to 1
 		for (let row of probabilities) {
 			let rowSum = row.reduce((a, b) => a + b, 0);
-			console.log(rowSum);
-			console.log(Math.abs(rowSum - 1));
 			if (Math.abs(rowSum - 1) > epsilon) {  // Allow for small floating point errors
 				return "Each row of probabilities must sum to 1."
 			}
@@ -233,7 +348,6 @@ $(document).ready(function() {
 
 		if (typeof isValidated === "string"){
 			showPopup(isValidated);
-			console.log(isValidated);
 			return;
 		}
 
@@ -257,19 +371,41 @@ $(document).ready(function() {
 			showPopup("Please initialize Markov Chain first.");
 			return;
 		}
+		resetSimulation(visNetwork);
 		//Check if the simulation is running if yes, call stopSimulation and revert the button text
 		if (isRunning()) {
 			stopSimulation();
-			$("#simulate-btn").text("Simulate").removeClass("btn-danger").addClass("btn-primary");
+			resetSimulation(visNetwork);
 			return;
 		}
+		$("#state-history").empty();
 		runSimulation(visNetwork, getInterval(), getNSteps());
 		//Change the button text to stop and change bootstrap class
 		$("#simulate-btn").text("Stop").removeClass("btn-primary").addClass("btn-danger");
 
 	}
 	function preFillForm(){
-		let data = sampleWeather();
+		//Get the id of the button
+		let id = $(this).attr("id");
+		//depending on the data, let data be a function that returns the data
+		let data = null;
+		switch (id) {
+			case "weather-data":
+				data = sampleWeather();
+				break;
+			case "health-data":
+				data = sampleHealth();
+				break;
+			case "manufacture-data":
+				data = sampleManufacturing();
+				break;
+			case "sports-data":
+				data = sampleSports();
+				break;
+			default:
+				console.log("Error: Invalid button id");
+				return;
+		}
 		if (event) {
 			event.preventDefault();
 		}
@@ -294,7 +430,7 @@ $(document).ready(function() {
 			header.append($("<div>").addClass("col").text(data.states[i]));
 		}
 		matrixInputs.append(header);
-
+		n_matrixInputs.append(header.clone());
 		for (let i = 0; i < data.states.length; i++) {
 			// Create initial state probability inputs
 			let initStateInput = $("<input>")
@@ -318,9 +454,22 @@ $(document).ready(function() {
 				row.append(column);
 			}
 			matrixInputs.append(row);
+			n_matrixInputs.append(row.clone());
+			//Disable the inputs for n matrix
+			n_matrixInputs.find("input").prop("disabled", true);
 		}
 		n_steps.val(data.n_steps);
 		interval.val(data.interval);
+	}
+	function n_stepCalculation(){
+		let matrixToPower = getMatrix();
+		let newMatrix = matrixExponentiation(matrixToPower, getNValue());
+		//For every row, replace the value of input per column
+		for (let i = 0; i < newMatrix.length; i++) {
+			for (let j = 0; j < newMatrix.length; j++) {
+				n_matrixInputs.find("input").eq(i * newMatrix.length + j).val(newMatrix[i][j]);
+			}
+		}
 	}
 
 	$("#add-state").on("click", addNewState);
@@ -329,6 +478,10 @@ $(document).ready(function() {
 	$("#display-btn").on("click", initStateDiagram);
 	$("#simulate-btn").on("click", runMarkovChain);
 	$("#weather-data").on("click", preFillForm);
+	$("#health-data").on("click", preFillForm);
+	$("#manufacture-data").on("click", preFillForm);
+	$("#sports-data").on("click", preFillForm);
+	n_value.on("change", n_stepCalculation);
 
 	initForm();
 });
