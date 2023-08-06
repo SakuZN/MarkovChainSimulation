@@ -16,7 +16,7 @@ function getRandomColor() {
 		'#008080',  // Teal
 		'#5d5daf',  // Navy
 		'#0096b1',  // Purple
-		'#A52A2A',  // Brown
+		'#c5614c',  // Brown
 		'#808080'   // Gray
 	];
 	return colors[Math.floor(Math.random() * colors.length)];
@@ -178,18 +178,18 @@ function runSimulation (vis_network, speed, n_steps) {
 	
 	//Set a timeout to highlight the initial state
 	appendStateHistory(stateData.states[currentState].name, null, timelineCounter++);
-
+	const nextState = weightedRandomChoice(stateData.probabilities[currentState]);
+	nodes.update({ id: currentState, color: 'red', borderWidth: 7 });
 	(function () {
 		const promise = new Promise((resolve) => {
 			setTimeout(() => {
-				nodes.update({ id: currentState, color: 'red', borderWidth: 7 });
 				resolve("Node highlighted.");
 			}, speed);
 		});
 		promise
 			.then((result) => {
-				const nextState = weightedRandomChoice(stateData.probabilities[currentState]);
 				showTransition(currentState, nextState, timelineCounter++);
+				currentState = nextState;
 				// Return a new Promise inside then
 				return new Promise((resolve) => {
 					setTimeout(() => {
@@ -222,8 +222,8 @@ function runSimulation (vis_network, speed, n_steps) {
 		// After the speed interval, revert the colors and move to the next state
 		setTimeout(() => {
 			// Revert colors
-			nodes.update({ id: fromState, color: originalNodeColor, borderWidth: 2, border: originalNodeColor });
-			edges.update({ id: edgeID, color: originalEdgeColor, width: 4 });
+			nodes.update({ id: fromState, color: originalNodeColor, borderWidth: 1, border: originalNodeColor });
+			edges.update({ id: edgeID, color: originalEdgeColor, width: 2 });
 
 			// Move to the next state
 			currentState = toState;
@@ -294,7 +294,7 @@ function resetSimulation(vis_network) {
 	let simulateBtn = $("#simulate-btn");
 	simulateBtn.text("Simulate").removeClass("btn-danger").addClass("btn-primary");
 	for (let i = 0; i < stateData.states.length; i++) {
-		nodes.update({ id: i, color: stateData.states[i].color, borderWidth: 2 });
+		nodes.update({ id: i, color: stateData.states[i].color, borderWidth: 1 });
 		for (let j = 0; j < stateData.states.length; j++) {
 			edges.update({ id: i + j + (i * stateData.states.length), color: stateData.edgeColors[i][j] });
 		}
