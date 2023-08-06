@@ -19,12 +19,13 @@ function showPopup(message) {
 	});
 }
 function sampleWeather(){
-	let states = ["Sunny", "Rainy"];
+	let states = ["Sunny", "Rainy", "Cloudy"];
 	let probabilities = [
-		[0.5, 0.5],
-		[0.5, 0.5]
+		[0.7, 0.2, 0.1],
+		[0.1, 0.6, 0.3],
+		[0.2, 0.5, 0.3],
 	];
-	let initProbs = [0.5, 0.5];
+	let initProbs = [0.5, 0.3, 0.2];
 	let n_steps = 10;
 	let interval = 500;
 	return {
@@ -226,6 +227,15 @@ $(document).ready(function() {
 		n_matrixInputs.find(".row").last().remove();
 		updateProbInputs();
 	}
+	function destroyNetwork() {
+		if (event) {
+			event.preventDefault();
+		}
+		if(visNetwork != null) {
+			visNetwork.destroy();
+			visNetwork = null;
+		}
+	}
 	function resetForm(){
 		if (event) {
 			event.preventDefault();
@@ -240,9 +250,8 @@ $(document).ready(function() {
 		matrixInputs.empty();
 		n_matrixInputs.empty();
 		$("#state-history").empty();
-		if (visNetwork !== null) {
-			visNetwork.destroy();
-		}
+		destroyNetwork();
+		
 	}
 	function initForm(){
 		while(stateInputs.find("input").length < 2){
@@ -351,14 +360,13 @@ $(document).ready(function() {
 			return;
 		}
 
-		if (visNetwork !== null) {
-			visNetwork.destroy();
-		}
+		destroyNetwork();
 		visNetwork = createNetwork(getStateNames(), getMatrix(), getInitProbs());
-
+		
 		visNetwork.on('stabilizationIterationsDone', function () {
 			// Disable physics once the network has stabilized
 			visNetwork.setOptions({ physics: false });
+			visNetwork.fit();
 		});
 	}
 
@@ -367,21 +375,23 @@ $(document).ready(function() {
 			event.preventDefault();
 		}
 		//Check if the diagram is initialized
-		if (visNetwork === null) {
-			showPopup("Please initialize Markov Chain first.");
+		if (!visNetwork) {
+			showPopup("Please initialize the diagram first.");
 			return;
 		}
+		let simulateBtn = $("#simulate-btn");
 		resetSimulation(visNetwork);
 		//Check if the simulation is running if yes, call stopSimulation and revert the button text
 		if (isRunning()) {
 			stopSimulation();
 			resetSimulation(visNetwork);
+			simulateBtn.text("Simulate").removeClass("btn-danger").addClass("btn-primary");
 			return;
 		}
 		$("#state-history").empty();
 		runSimulation(visNetwork, getInterval(), getNSteps());
 		//Change the button text to stop and change bootstrap class
-		$("#simulate-btn").text("Stop").removeClass("btn-primary").addClass("btn-danger");
+		simulateBtn.text("Stop").removeClass("btn-primary").addClass("btn-danger");
 
 	}
 	function preFillForm(){
@@ -460,6 +470,8 @@ $(document).ready(function() {
 		}
 		n_steps.val(data.n_steps);
 		interval.val(data.interval);
+		//Initialize the diagram
+		initStateDiagram();
 	}
 	function n_stepCalculation(){
 		let matrixToPower = getMatrix();
@@ -481,7 +493,7 @@ $(document).ready(function() {
 	$("#health-data").on("click", preFillForm);
 	$("#manufacture-data").on("click", preFillForm);
 	$("#sports-data").on("click", preFillForm);
-	n_value.on("change", n_stepCalculation);
+	n_value.on("input blur", n_stepCalculation);
 
 	initForm();
 });

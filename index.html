@@ -1,21 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <title>Markov Chain Visualization and Visualization</title>
-    <meta name="description" content="A markov chain visualization and simulation" />
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Markov Chain Visualization</title>
+    <meta name="description" content="A Markov Chain Visualization and Simulation" />
     <meta name="robots" content="noindex, nofollow" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
+	<meta content="Markov Chain, Simulation, Visualization, Guide, Educational" name="keywords">
+	<link href="icon.png" rel="icon" type="image/png"/>
+	  
+	  <!-- This is for Facebook's Open Graph. -->
+	<meta content="Markov Chain Visualization and Simulation" property="og:title"/>
+	<meta content="https://sakuzn.github.io/MarkovChainSimulation/" property="og:url"/>
+	<meta content="A Markov Chain Visualization and Simulation" property="og:description"/>
+	  
+	  <!-- This is for Twitter's Card feature. -->
+	<meta content="Markov Chain Visualization" name="twitter:title"/>
+	<meta content="A Markov Chain Visualization and Simulation"
+	        name="twitter:description"/>
+	
+	<link rel="stylesheet"
+	        href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css"
+	        integrity="sha512-7nTa5CnxbzfQgjQrNmHXB7bxGTUVO/DcYX6rpgt06MkzM0rVXP3EYCv/Ojxg5H0dKbY7llbbYaqgfZjnGOAWGA=="
+	        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
       crossorigin="anonymous"
     />
+	  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<link href="https://unpkg.com/vis-network@7.6.2/styles/vis-network.min.css" rel="stylesheet" />
+	  
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/modal-animation.css" />
-    <link href="https://unpkg.com/vis-network@7.6.2/styles/vis-network.min.css" rel="stylesheet" />
+    
   </head>
   <body>
     <div class="container-fluid mb-5">
@@ -86,16 +105,16 @@
                     </li>
                   </ul>
                   <strong>Let's create a simple markov chain.</strong>
-                  <center>
-                    <img
-                      class="img-fluid"
-                      src="https://deparkes.co.uk/wp-content/uploads/2020/08/GraphView.png"
-                      alt="Markov Transition Graph from Deparkes"
-                    />
-                    <div>
-                      <small class="text-center text-muted">Markov Transition Graph from Deparkes</small>
-                    </div>
-                  </center>
+                  <div class="text-center">
+	                  <img
+			                  class="img-fluid"
+			                  src="https://deparkes.co.uk/wp-content/uploads/2020/08/GraphView.png"
+			                  alt="Markov Transition Graph from Deparkes"
+	                  />
+	                  <div>
+		                  <small class="text-center text-muted">Markov Transition Graph from Deparkes</small>
+	                  </div>
+                  </div>
                   <table class="weather-table table mt-4">
                     <thead>
                       <tr>
@@ -177,7 +196,7 @@
                   </p>
                   <p>
                     When defining Markov Chains, one can either set an initial state or initial state probabilities.
-                    Selecting a sure initial state is simply setting the vector to [1.0, 0.0, 0.0]. In this example this
+                    Selecting a sure initial state is simply setting the vector to <strong>[1.0, 0.0, 0.0]</strong>. In this example this
                     is exactly what we do, making the start state always sunny.
                   </p>
 
@@ -196,11 +215,11 @@
                 <section class="n-step-transition-matrix mt-4">
                   <h5>N-Step Transition Matrix</h5>
                   <p>
-                    What n Step Transition Matrix gives us is the probability of reaching a certain future state given
+                    What N-Step transition matrix gives us is the probability of reaching a certain future state given
                     the current state at n steps.
                   </p>
                   <p>
-                    An n-step transition matrix is found by taking the nth power of the original transition matrix. This
+                    A N-Step transition matrix is found by taking the nth power of the original transition matrix. This
                     is based on the principle that the probability of transitioning from one state to another in n steps
                     is the sum of the probabilities of all paths from the initial state to the final state that consist
                     of exactly n steps.
@@ -253,11 +272,11 @@
                       </p>
                     </section>
                     <section class="3-step-and-beyond">
-                      <h6>3 step and beyond</h6>
+                      <h6>3 Step and Beyond</h6>
                       <p>
                         After the two step matrix it gets a little tricky as we need to get three and beyond we need to
                         get dot product of the previous step and the current transition which can get tedious as more
-                        steps are added. (P^3 = P^2 * P)
+                        steps are added. <span class="math">(P^3 = P^2 * P)</span>
                       </p>
                       <table class="dot-product table">
                         <thead>
@@ -301,20 +320,99 @@
                         The concept of steady state is central to stationary or time-homogeneous Markov chains, where
                         the transition probabilities don't change over time.
                       </p>
-                      <p>
-                        <strong> n(1) Step Matrix at the nth power </strong> <br />
-                        [[0.7 0.2 0.1] <br />
-                        [0.1 0.6 0.3] <br />
-                        [0.2 0.5 0.3]]
-
-                        <br />
-                        <br />
-
-                        <strong> n(19) Step Matrix </strong> <br />
-                        [[0.30953707 0.45237239 0.23809054] <br />
-                        [0.30951661 0.4523856 0.23809779] <br />
-                        [0.30952024 0.45238326 0.2380965 ]]
-                      </p>
+	                    <h6>1-Step Transition Matrix</h6>
+	                    <table class="dot-product table">
+		                    <thead>
+		                    <tr>
+			                    <th scope="col"></th>
+			                    <th scope="col">0</th>
+			                    <th scope="col">1</th>
+			                    <th scope="col">2</th>
+		                    </tr>
+		                    </thead>
+		                    <tbody>
+		                    <tr>
+			                    <th scope="row">0</th>
+			                    <td>0.7</td>
+			                    <td>0.2</td>
+			                    <td>0.1</td>
+		                    </tr>
+		                    <tr>
+			                    <th scope="row">1</th>
+			                    <td>0.1</td>
+			                    <td>0.6</td>
+			                    <td>0.3</td>
+		                    </tr>
+		                    <tr>
+			                    <th scope="row">2</th>
+			                    <td>0.2</td>
+			                    <td>0.5</td>
+			                    <td>0.3</td>
+		                    </tr>
+		                    </tbody>
+	                    </table>
+	                    <h6>50-Step Transition Matrix</h6>
+	                    <table class="dot-product table">
+		                    <thead>
+		                    <tr>
+			                    <th scope="col"></th>
+			                    <th scope="col">0</th>
+			                    <th scope="col">1</th>
+			                    <th scope="col">2</th>
+		                    </tr>
+		                    </thead>
+		                    <tbody>
+		                    <tr>
+			                    <th scope="row">0</th>
+			                    <td>0.3095</td>
+			                    <td>0.4523</td>
+			                    <td>0.2380</td>
+		                    </tr>
+		                    <tr>
+			                    <th scope="row">1</th>
+			                    <td>0.3095</td>
+			                    <td>0.4523</td>
+			                    <td>0.2380</td>
+		                    </tr>
+		                    <tr>
+			                    <th scope="row">2</th>
+			                    <td>0.3095</td>
+			                    <td>0.4523</td>
+			                    <td>0.2380</td>
+		                    </tr>
+		                    </tbody>
+	                    </table>
+	                    <h6>100-Step Transition Matrix</h6>
+	                    <table class="dot-product table">
+		                    <thead>
+		                    <tr>
+			                    <th scope="col"></th>
+			                    <th scope="col">0</th>
+			                    <th scope="col">1</th>
+			                    <th scope="col">2</th>
+		                    </tr>
+		                    </thead>
+		                    <tbody>
+		                    <tr>
+			                    <th scope="row">0</th>
+			                    <td>0.3095</td>
+			                    <td>0.4523</td>
+			                    <td>0.2380</td>
+		                    </tr>
+		                    <tr>
+			                    <th scope="row">1</th>
+			                    <td>0.3095</td>
+			                    <td>0.4523</td>
+			                    <td>0.2380</td>
+		                    </tr>
+		                    <tr>
+			                    <th scope="row">2</th>
+			                    <td>0.3095</td>
+			                    <td>0.4523</td>
+			                    <td>0.2380</td>
+		                    </tr>
+		                    </tbody>
+	                    </table>
                       <div class="ending">
                         <h6>What is this all for?</h6>
                         <p>
@@ -326,7 +424,7 @@
                         </p>
                         <p>
                           From the results of the weather chain, we can say that the probability of it being sunny is
-                          around 31%, rainy 45%, and cloudy 24%.
+	                        around <strong>31%</strong>, rainy <strong>45%</strong>, and cloudy <strong>24%</strong>.
                         </p>
                         <p>
                           In a perfect world, where there are no changes due to factors like global warming, and
@@ -346,80 +444,118 @@
           </div>
         </div>
         <!-- Title -->
-        <h3 class="mb-3 mt-5 text-center">Markov Chain Diagram</h3>
-        <div class="col-lg-8 col-md-12">
+	      
+        <h3 class="mb-1 mt-5 text-center">Markov Chain Diagram</h3>
+	      <small class="text-center text-muted mb-3">
+		      Note: The diagram is interactable, you can drag the nodes around and zoom in and out.
+	      </small>
+	      <div class="d-grid gap-2 d-md-flex justify-content-center">
+		      <button id="simulate-btn" class="btn btn-primary ms-2" type="button">Simulate</button>
+	      </div>
+        <div class="col-lg-8 col-md-12 mb-3">
           <div id="canvas" class="border" style="height: 600px"></div>
-          <div class="text-center timeline border" style="height: 45%">
-            <h3 class="mb-3 mt-3">Event Sequence | Timeline:</h3>
-            <div id="state-history" class="mx-3 scrollable-content">
-              <!-- State history goes here -->
-            </div>
-          </div>
-          <script src="https://unpkg.com/vis-network@7.6.2/standalone/umd/vis-network.min.js"></script>
-          <script src="scripts/markov_diagram.js"></script>
         </div>
-        <div class="col mt-2">
-          <div class="card" style="height: 100%">
-            <div class="card-body">
-              <h5 class="card-title">Markov Chain Configuration</h5>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button id="weather-data" class="btn btn-info" type="button">Example: Weather</button>
-                <button id="health-data" class="btn btn-info" type="button">Example: Health</button>
-                <button id="manufacture-data" class="btn btn-info" type="button">Example: Manufacture</button>
-                <button id="sports-data" class="btn btn-info" type="button">Example: Sports</button>
-              </div>
-              <form id="config-form">
-                <div class="mb-3">
-                  <label class="form-label">States</label>
-                  <div id="state-inputs"></div>
-                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button id="add-state" class="btn btn-primary mt-2">+</button>
-                    <button id="delete-state" class="btn btn-danger mt-2 ms-2">-</button>
-                  </div>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Initial State Probabilities</label>
-                  <div id="init-prob-inputs"></div>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Transition Probabilities Table</label>
-                  <div id="matrix-inputs"></div>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">No. of Steps to Simulate</label>
-                  <input type="number" id="n-steps-input" class="form-control" value="1" />
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Step Delay (in ms)</label>
-                  <input type="number" id="interval-input" class="form-control" value="500" />
-                </div>
-
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                  <button id="display-btn" class="btn btn-success" type="submit">Show Markov Chain</button>
-                  <button id="simulate-btn" class="btn btn-primary ms-2" type="button">Simulate</button>
-                  <button id="reset-btn" class="btn btn-danger ms-2" type="button">Reset</button>
-                </div>
-              </form>
-              <hr />
-              <h5 class="card-title">n-Step Probability Matrix Simulation</h5>
-              <form id="nstep-form">
-                <div class="mb-3">
-                  <label class="form-label">Transition Probabilities Table</label>
-                  <div id="nmatrix-inputs"></div>
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Matrix power</label>
-                  <input type="number" id="n-value-input" class="form-control" value="1" min="1" />
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
+	      <div class="col mt-2 me-4" >
+		      <div class="card" id="form-tab" style="height: 100%">
+			      <div class="card-body">
+				      <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
+					      <li class="nav-item" role="presentation">
+						      <button class="nav-link active" id="config-form-tab" data-bs-toggle="tab"
+						              data-bs-target="#config-panel" type="button" role="tab"
+						              aria-controls="config-panel" aria-selected="true">
+							      Markov Chain Configuration
+						      </button>
+					      </li>
+					      <li class="nav-item" role="presentation">
+						      <button class="nav-link" id="nstep-form-tab" data-bs-toggle="tab"
+						              data-bs-target="#nstep-panel" type="button" role="tab" aria-controls="nstep-panel"
+						              aria-selected="false">
+							      N-Step Probability Matrix Calculation
+						      </button>
+					      </li>
+					      <li class="nav-item" role="presentation">
+						      <button class="nav-link" id="timeline-tab" data-bs-toggle="tab"
+						              data-bs-target="#timeline-panel" type="button" role="tab" aria-controls="timeline-panel"
+						              aria-selected="false">
+							      Event Sequence | Timeline
+						      </button>
+					      </li>
+				      </ul>
+				      
+				      <div class="tab-content" id="myTabContent">
+					      <div class="tab-pane show active mt-2" id="config-panel" role="tabpanel"
+					           aria-labelledby="config-form-tab">
+						      <hr>
+						      <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+							      <button id="weather-data" class="btn btn-info btn-sm" type="button">Example: Weather</button>
+							      <button id="health-data" class="btn btn-info btn-sm" type="button">Example: Health</button>
+							      <button id="manufacture-data" class="btn btn-info btn-sm" type="button">Example: Manufacture</button>
+							      <button id="sports-data" class="btn btn-info btn-sm" type="button">Example: Sports</button>
+						      </div>
+						      <form id="config-form">
+							      <div class="mb-3">
+								      <label class="form-label">States</label>
+								      <div id="state-inputs"></div>
+								      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									      <button id="add-state" class="btn btn-primary mt-2">+</button>
+									      <button id="delete-state" class="btn btn-danger mt-2 ms-2">-</button>
+								      </div>
+							      </div>
+							      
+							      <div class="mb-3">
+								      <label class="form-label">Initial State Probabilities</label>
+								      <div id="init-prob-inputs"></div>
+							      </div>
+							      
+							      <div class="mb-3">
+								      <label class="form-label">Transition Probabilities Table</label>
+								      <div id="matrix-inputs"></div>
+							      </div>
+							      
+							      <div class="mb-3">
+								      <label class="form-label">No. of Steps to Simulate</label>
+								      <input type="number" id="n-steps-input" class="form-control" value="1" />
+							      </div>
+							      
+							      <div class="mb-3">
+								      <label class="form-label">Step Delay (in ms)</label>
+								      <input type="number" id="interval-input" class="form-control" value="500" />
+							      </div>
+							      
+							      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+								      <button id="display-btn" class="btn btn-success" type="submit">Show Markov Chain</button>
+								      <button id="reset-btn" class="btn btn-danger ms-2" type="button">Reset</button>
+							      </div>
+						      </form>
+					      </div>
+					      <div class="tab-pane mt-2" id="nstep-panel" role="tabpanel" aria-labelledby="nstep-form-tab">
+						      <hr>
+						      <form id="nstep-form">
+							      <div class="mb-3">
+								      <label class="form-label">Transition Probabilities Table</label>
+								      <div id="nmatrix-inputs"></div>
+							      </div>
+							      
+							      <div class="mb-3">
+								      <label class="form-label">Matrix power</label>
+								      <input type="number" id="n-value-input" class="form-control" value="1" min="1" />
+							      </div>
+						      </form>
+					      </div>
+					      <div class="tab-pane mt-2" id="timeline-panel" role="tabpanel" aria-labelledby="timeline-tab">
+						      <hr>
+						      <div class="text-center timeline border" >
+							      <h3 class="mb-3 mt-3">Event Sequence | Timeline:</h3>
+							      <hr>
+							      <div id="state-history" class="mx-3">
+								      <!-- State history goes here -->
+							      </div>
+						      </div>
+					      </div>
+				      </div>
+			      </div>
+		      </div>
+	      </div>
       </div>
     </div>
     <!-- Popup Modal -->
@@ -440,22 +576,36 @@
       </div>
     </div>
     <!-- Scripts -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        var mathElements = document.getElementsByClassName('math')
-        for (var i = 0; i < mathElements.length; i++) {
-          var mathElement = mathElements[i]
-          katex.render(mathElement.innerText, mathElement)
-        }
-      })
-    </script>
     <script
-      crossorigin="anonymous"
-      integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-      referrerpolicy="no-referrer"
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-    ></script>
-    <script src="js/bootstrap.bundle.js"></script>
+		    crossorigin="anonymous"
+		    integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+		    referrerpolicy="no-referrer"
+		    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+	    
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.bundle.min.js"
+            integrity="sha512-ToL6UYWePxjhDQKNioSi4AyJ5KkRxY+F1+Fi7Jgh0Hp5Kk2/s8FD7zusJDdonfe5B00Qw+B8taXxF6CFLnqNCw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer">
+	    
+    </script>
+    <script src="https://unpkg.com/vis-network@7.6.2/standalone/umd/vis-network.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js"
+            integrity="sha512-aoZChv+8imY/U1O7KIHXvO87EOzCuKO0GhFtpD6G2Cyjo/xPeTgdf3/bchB10iB+AojMTDkMHDPLKNxPJVqDcw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    
+    <script src="scripts/markov_diagram.js"></script>
     <script src="scripts/main.js"></script>
+    
+    <script>
+	    document.addEventListener('DOMContentLoaded', function () {
+		    var mathElements = document.getElementsByClassName('math')
+		    for (var i = 0; i < mathElements.length; i++) {
+			    var mathElement = mathElements[i]
+			    katex.render(mathElement.innerText, mathElement)
+		    }
+	    })
+    </script>
   </body>
 </html>

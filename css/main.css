@@ -1,10 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+html {
+    font-family: 'Poppins', sans-serif;
+}
+.accordion h5 {
+    font-size: 30px;
+    font-weight: 600;
+}
+.accordion h6 {
+    font-size: 20px;
+    font-weight: 600;
+}
+h3 {
+    font-size: 35px;
+    font-weight: 600;
+}
 #canvas {
     margin-top: 10px;
-    border: 1px solid black;
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 0 3px #4280ab, 0px 0px 10px 3px rgba(0, 0, 0, 0.1);
 }
+#form-tab{
+    border: 2px solid black;
+    border-radius: 10px;
+}
+#simulate-btn-icon{
+    font-size: 20px;
+}
+
 #config-form, .timeline {
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 .scrollable-content {
     height: 600px; /* Adjust as needed */
@@ -12,7 +39,7 @@
     overflow-x: auto;
 }
 #state-history {
-    height: 300px; /* Adjust as needed */
+    height: 400px; /* Adjust as needed */
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -20,4 +47,10 @@
     #diagram-container {
         flex-direction: column;
     }
+}
+.btn-info {
+    background-color: #4280ab;
+    border-color: #4280ab;
+    font-size: 16px;
+    color: white;
 }
