@@ -39,19 +39,27 @@
   <body>
     <div class="container-fluid mb-5">
       <div class="row">
-        <h1 class="mb-2 mt-3">Markov Chains Visualization</h1>
-        <p class="fs-6">This website is created for the purpose of visualizing Markov Chains.</p>
-        <p class="description">
-          <span class="fw-medium">Before we get started,</span> look into how Markov Chain works. If you wish to skip,
-          you may collapse the division by clicking the title below.
-        </p>
-        <p class="description">
-          <span class="fw-medium">Want a more detailed explanation?</span> You may find a more detailed explanation of
-          Markov Chains, complete with the Python code used to derive the simulation results shown below, by clicking
-          <a href="https://datalore.jetbrains.com/notebook/BHICuHTWkj8Anq9egAu6Pv/NWwROZYFAb4wT3uGpoB4w9">here.</a>
-          <br />
-          <strong>(Note that you need a Jetbrains account to access the link)</strong>
-        </p>
+	      <div class="container px-4 py-5" id="custom-cards">
+		      <h1 class="mb-2 mt-3 title">Markov Chains Visualization</h1>
+		      <p class="fs-6 text-secondary">This website is created for the purpose of visualizing Markov Chains.</p>
+		      
+		      <div class="p-4 border bg-light rounded-3">
+			      <p class="description">
+				      <span class="fw-bold text-secondary">Before we get started,</span> look into how Markov Chain works. If you wish to skip,
+				      you may collapse the division by clicking the title below.
+			      </p>
+		      </div>
+		      
+		      <div class="p-4 border bg-light rounded-3 mt-4">
+			      <p class="description">
+				      <span class="fw-bold text-secondary">Want a more detailed explanation?</span> You may find a more detailed explanation of
+				      Markov Chains, complete with the Python code used to derive the simulation results shown below, by clicking
+				      <a href="https://datalore.jetbrains.com/notebook/BHICuHTWkj8Anq9egAu6Pv/NWwROZYFAb4wT3uGpoB4w9" class="link-primary">here.</a>
+				      <br />
+				      <strong>(Note that you need a Jetbrains account to access the link)</strong>
+			      </p>
+		      </div>
+	      </div>
         <div class="accordion">
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -74,6 +82,7 @@
                   particular state depends solely on the current state and time elapsed, and not on the sequence of
                   states that preceded it.
                 </section>
+	              <hr>
                 <section class="memorylessness mt-4">
                   <h5>Memorylessness</h5>
                   <p>
@@ -179,6 +188,7 @@
                     </ul>
                   </div>
                 </section>
+	              <hr>
                 <section class="initial-state-probability mt-4">
                   <h5>Initial State Probability</h5>
                   <p>
