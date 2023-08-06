@@ -136,7 +136,8 @@ function createNetwork(states, probabilities, initProbs) {
 			barnesHut: {
 				gravitationalConstant: -2000,
 				springConstant: 0.04,
-				springLength: 250
+				springLength: 250,
+				avoidOverlap: 0.5
 			}
 		},
 		edges: {
@@ -158,12 +159,12 @@ function createNetwork(states, probabilities, initProbs) {
 		layout: {
 			improvedLayout: true,
 		},
-		/*
+		
 		configure: {
 			enabled: true,
 			filter: 'physics',
 		}
-		 */
+		 
 		
 	};
 	

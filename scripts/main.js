@@ -476,6 +476,8 @@ $(document).ready(function() {
 		}
 		n_steps.val(data.n_steps);
 		interval.val(data.interval);
+		//Initialize the diagram
+		initStateDiagram();
 	}
 	function n_stepCalculation(){
 		let matrixToPower = getMatrix();

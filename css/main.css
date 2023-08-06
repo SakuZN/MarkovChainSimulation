@@ -16,8 +16,21 @@ h3 {
 }
 #canvas {
     margin-top: 10px;
-    border: 1px solid black;
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.1);
 }
+#canvas::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    bottom: -5px;
+    right: -5px;
+    border: 2px solid #3498db;
+}
+
 #config-form, .timeline {
     margin-top: 10px;
     margin-bottom: 10px;
