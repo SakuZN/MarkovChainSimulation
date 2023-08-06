@@ -227,6 +227,15 @@ $(document).ready(function() {
 		n_matrixInputs.find(".row").last().remove();
 		updateProbInputs();
 	}
+	function destroyNetwork() {
+		if (event) {
+			event.preventDefault();
+		}
+		if(visNetwork != null) {
+			visNetwork.destroy();
+			visNetwork = null;
+		}
+	}
 	function resetForm(){
 		if (event) {
 			event.preventDefault();
@@ -241,14 +250,7 @@ $(document).ready(function() {
 		matrixInputs.empty();
 		n_matrixInputs.empty();
 		$("#state-history").empty();
-		try {
-			if (visNetwork.body !== null) {
-				visNetwork.destroy();
-				clearData();
-			}
-		} catch (error) {
-			//Do nothing
-		}
+		destroyNetwork();
 		
 	}
 	function initForm(){
@@ -358,14 +360,7 @@ $(document).ready(function() {
 			return;
 		}
 
-		try {
-			if (visNetwork.body !== null) {
-				visNetwork.destroy();
-				clearData();
-			}
-		} catch (error) {
-			//Do nothing
-		}
+		destroyNetwork();
 		visNetwork = createNetwork(getStateNames(), getMatrix(), getInitProbs());
 		
 		visNetwork.on('stabilizationIterationsDone', function () {
@@ -380,24 +375,23 @@ $(document).ready(function() {
 			event.preventDefault();
 		}
 		//Check if the diagram is initialized
-		try {
-			let check = visNetwork.body !== null;
-		} catch (error) {
+		if (!visNetwork) {
 			showPopup("Please initialize the diagram first.");
 			return;
 		}
-		
+		let simulateBtn = $("#simulate-btn");
 		resetSimulation(visNetwork);
 		//Check if the simulation is running if yes, call stopSimulation and revert the button text
 		if (isRunning()) {
 			stopSimulation();
 			resetSimulation(visNetwork);
+			simulateBtn.text("Simulate").removeClass("btn-danger").addClass("btn-primary");
 			return;
 		}
 		$("#state-history").empty();
 		runSimulation(visNetwork, getInterval(), getNSteps());
 		//Change the button text to stop and change bootstrap class
-		$("#simulate-btn").text("Stop").removeClass("btn-primary").addClass("btn-danger");
+		simulateBtn.text("Stop").removeClass("btn-primary").addClass("btn-danger");
 
 	}
 	function preFillForm(){
