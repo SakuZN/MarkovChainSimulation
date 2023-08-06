@@ -178,7 +178,9 @@ $(document).ready(function() {
 				let matrixInput = $("<input>")
 					.attr("type", "text")
 					.addClass("form-control mb-2")
-					.attr("placeholder", placeholder);
+					.attr("placeholder", placeholder)
+					.keyup(updateNMatrixInputs)
+					.change(updateNMatrixInputs);
 				if (currentData[i] && currentData[i].transitionProbs[j]) {
 					matrixInput.val(currentData[i].transitionProbs[j]);
 				}
@@ -190,6 +192,14 @@ $(document).ready(function() {
 			//Disable the inputs for n matrix
 			n_matrixInputs.find("input").prop("disabled", true);
 		}
+	}
+
+	function updateNMatrixInputs() {
+		//Triggered whenever the values are changed in the config form for probabilties
+		//For each row, update each column
+		n_matrixInputs.find("input").each(function(index) {
+			$(this).val(matrixInputs.find("input").eq(index).val());
+		});
 	}
 
 	function addNewState() {
@@ -458,7 +468,9 @@ $(document).ready(function() {
 				let matrixInput = $("<input>")
 					.attr("type", "text")
 					.addClass("form-control mb-2")
-					.attr("placeholder", placeholder);
+					.attr("placeholder", placeholder)
+					.keyup(updateNMatrixInputs)
+					.change(updateNMatrixInputs);
 				matrixInput.val(data.probabilities[i][j]);
 				let column = $("<div>").addClass("col").append(matrixInput);
 				row.append(column);
