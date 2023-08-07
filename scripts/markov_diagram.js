@@ -16,7 +16,7 @@ function getRandomColor() {
 		'#008080',  // Teal
 		'#5d5daf',  // Navy
 		'#0096b1',  // Purple
-		'#c5614c',  // Brown
+		'#B4EEB4',
 		'#808080'   // Gray
 	];
 	return colors[Math.floor(Math.random() * colors.length)];
